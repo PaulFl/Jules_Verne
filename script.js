@@ -56,6 +56,8 @@ windyInit(options, windyAPI => {
         direction: 'top'
     })
     .addTo(map)
+
+      map.setView([gitana_lat, gitana_lng])
   })
 
 
