@@ -12,15 +12,15 @@ const options = {
 };
 
 const gitana_icon = L.icon({
-  iconUrl: 'gitana.svg',
-  iconSize: [40, 40],
-  className: 'gitana-marker'
+    iconUrl: 'gitana.svg',
+    iconSize: [40, 40],
+    className: 'gitana-marker'
 })
 
 const sodebo_icon = L.icon({
-  iconUrl: 'sodebo.svg',
-  iconSize: [40, 40],
-  className: 'sodebo-marker'
+    iconUrl: 'sodebo.svg',
+    iconSize: [40, 40],
+    className: 'sodebo-marker'
 })
 
 var gitana_cap = 0;
@@ -34,7 +34,20 @@ windyInit(options, windyAPI => {
     const {map} = windyAPI;
     // .map is instance of Leaflet map
 
-    fetch('ultims_data.json')
+    let myHeaders = new Headers();
+    myHeaders.append('pragma', 'no-cache');
+    myHeaders.append('cache-control', 'no-cache');
+
+    let myInit = {
+        method: 'GET',
+        headers: myHeaders,
+    };
+
+    let myRequest = new Request('ultims_data.json');
+
+
+
+    fetch(myRequest, myInit)
         .then(response => response.json())
         .then(jsonResponse => {
             console.log(jsonResponse)
