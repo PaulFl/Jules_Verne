@@ -11,68 +11,105 @@ const options = {
     zoom: 5,
 };
 
+const gitana_icon = L.icon({
+  iconUrl: 'gitana.svg',
+  iconSize: [40, 40],
+  className: 'gitana-marker'
+})
+
+const sodebo_icon = L.icon({
+  iconUrl: 'sodebo.svg',
+  iconSize: [40, 40],
+  className: 'sodebo-marker'
+})
+
+var gitana_cap = 0;
+var sodebo_cap = 0;
+
 // Initialize Windy API
 windyInit(options, windyAPI => {
     // windyAPI is ready, and contain 'map', 'store',
     // 'picker' and other usefull stuff
 
-    const { map } = windyAPI;
+    const {map} = windyAPI;
     // .map is instance of Leaflet map
 
     fetch('ultims_data.json')
-  .then(response => response.json())
-  .then(jsonResponse => {
-      console.log(jsonResponse)
-      gitana_lat_raw = jsonResponse['gitana']['lat'].split(',')
-      gitana_lat = parseInt(gitana_lat_raw[0]) + (parseFloat(gitana_lat_raw[1])+parseFloat(gitana_lat_raw[2])/100.0)/60.0
-      console.log(gitana_lat)
-      if (gitana_lat_raw[3] === "S") {
-          gitana_lat = -gitana_lat
-      }
+        .then(response => response.json())
+        .then(jsonResponse => {
+            console.log(jsonResponse)
 
-      gitana_lng_raw = jsonResponse['gitana']['lng'].split(',')
-      gitana_lng = parseInt(gitana_lng_raw[0]) + (parseFloat(gitana_lng_raw[1])+parseFloat(gitana_lng_raw[2])/100.0)/60.0
-      if (gitana_lng_raw[3] === "W") {
-          gitana_lng = -gitana_lng
-      }
-      console.log(gitana_lng)
+            gitana_lat_raw = jsonResponse['gitana']['lat'].split(',')
+            gitana_lat = parseInt(gitana_lat_raw[0]) + (parseFloat(gitana_lat_raw[1]) + parseFloat(gitana_lat_raw[2]) / 100.0) / 60.0
+            console.log(gitana_lat)
+            if (gitana_lat_raw[3] === "S") {
+                gitana_lat = -gitana_lat
+            }
 
-      L.marker([gitana_lat, gitana_lng])
-          .bindTooltip("Gitana",
-    {
-        permanent: true,
-        direction: 'top'
-    })
-    .addTo(map)
+            gitana_lng_raw = jsonResponse['gitana']['lng'].split(',')
+            gitana_lng = parseInt(gitana_lng_raw[0]) + (parseFloat(gitana_lng_raw[1]) + parseFloat(gitana_lng_raw[2]) / 100.0) / 60.0
+            if (gitana_lng_raw[3] === "W") {
+                gitana_lng = -gitana_lng
+            }
 
-      sodebo_lat_raw = jsonResponse['sodebo']['lat'].split(',')
-      sodebo_lat = parseInt(sodebo_lat_raw[0]) + (parseFloat(sodebo_lat_raw[1])+parseFloat(sodebo_lat_raw[2])/100.0)/60.0
-      console.log(sodebo_lat)
-      if (sodebo_lat_raw[3] === "S") {
-          sodebo_lat = -sodebo_lat
-      }
+            gitana_cap = jsonResponse['gitana']['cap']
 
-      sodebo_lng_raw = jsonResponse['sodebo']['lng'].split(',')
-      sodebo_lng = parseInt(sodebo_lng_raw[0]) + (parseFloat(sodebo_lng_raw[1])+parseFloat(sodebo_lng_raw[2])/100.0)/60.0
-      if (sodebo_lng_raw[3] === "W") {
-          sodebo_lng = -sodebo_lng
-      }
-      console.log(sodebo_lng)
+            L.marker([gitana_lat, gitana_lng], {icon: gitana_icon})
+                .bindTooltip("Gitana",
+                    {
+                        permanent: false,
+                        direction: 'top'
+                    })
+                .addTo(map)
 
-      L.marker([sodebo_lat, sodebo_lng])
-          .bindTooltip("Sodebo",
-    {
-        permanent: true,
-        direction: 'top'
-    })
-    .addTo(map)
+            sodebo_lat_raw = jsonResponse['sodebo']['lat'].split(',')
+            sodebo_lat = parseInt(sodebo_lat_raw[0]) + (parseFloat(sodebo_lat_raw[1]) + parseFloat(sodebo_lat_raw[2]) / 100.0) / 60.0
+            console.log(sodebo_lat)
+            if (sodebo_lat_raw[3] === "S") {
+                sodebo_lat = -sodebo_lat
+            }
 
-      console.log(jsonResponse)
-      console.log(jsonResponse['datetime'])
-    document.getElementById("datetime").innerHTML = jsonResponse['datetime']
+            sodebo_lng_raw = jsonResponse['sodebo']['lng'].split(',')
+            sodebo_lng = parseInt(sodebo_lng_raw[0]) + (parseFloat(sodebo_lng_raw[1]) + parseFloat(sodebo_lng_raw[2]) / 100.0) / 60.0
+            if (sodebo_lng_raw[3] === "W") {
+                sodebo_lng = -sodebo_lng
+            }
 
-      map.setView([gitana_lat, gitana_lng])
-  })
+            sodebo_cap = jsonResponse['sodebo']['cap']
+
+            L.marker([sodebo_lat, sodebo_lng], {icon: sodebo_icon})
+                .bindTooltip("Sodebo",
+                    {
+                        permanent: false,
+                        direction: 'top',
+                    })
+                .addTo(map)
+
+            document.getElementById("datetime").innerHTML = jsonResponse['datetime']
+
+            map.setView([gitana_lat, gitana_lng])
+            map.fire("zoomend");
+        })
+
+    map.on("zoomend", function (ev) {
+        var icons = document.getElementsByClassName("gitana-marker");
+        for (let icon of icons) {
+            console.log("icon")
+            icon.style.transformOrigin = "center";
+            icon.style.transform += " rotate(" + gitana_cap.toString() + "deg)";
+            icon.style.visibility = "";
+        }
+
+        icons = document.getElementsByClassName("sodebo-marker");
+        for (let icon of icons) {
+            console.log("icon_sodebo")
+            icon.style.transformOrigin = "center";
+            icon.style.transform += " rotate(" + sodebo_cap.toString() + "deg)";
+            icon.style.visibility = "";
+        }
+    });
+
+    map.fire("zoomend");
 
 
 });
