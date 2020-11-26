@@ -1,0 +1,13 @@
+#outer {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#windy {
+    width: 100%;
+    height: 90%;
+    flex-grow : 1;
+}
+
+

@@ -1,12 +1,13 @@
 {
     "gitana": {
-        "lat": "42,00,03,N",
-        "lng": "012,49,58,W",
-        "cap": 226
+        "lat": "37,45,86,N",
+        "lng": "019,03,83,W",
+        "cap": 216
     },
     "sodebo": {
-        "lat": "41,54,59,N",
-        "lng": "012,18,74,W",
-        "cap": 223
-    }
+        "lat": "37,37,12,N",
+        "lng": "018,10,33,W",
+        "cap": 210
+    },
+    "datetime": "Position du jeudi 26 novembre 2020 \u00e0  08h45 FR"
 }

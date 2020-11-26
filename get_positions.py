@@ -53,10 +53,16 @@ data['sodebo']['lat'] = sodebo_lat_lon[0].replace('°', ',').replace('\'', ',').
 data['sodebo']['lng'] = sodebo_lat_lon[1].replace('°', ',').replace('\'', ',').replace('.', ',')
 data['sodebo']['cap'] = int(sodebo_lat_lon[2].replace(' °', ''))
 
+index = r.html.full_text.find("Position du")
+index_end = r.html.full_text.find("FR")
+timedate_str = r.html.full_text[index:index_end+2]
+
+data['datetime'] = timedate_str
+
 
 print(data)
 json_data = json.dumps(data, indent=4)
 
-json_file = open('ultims_data.json', 'w')
+json_file = open('./ultims_data.json', 'w')
 json_file.write(json_data)
 json_file.close()
