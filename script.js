@@ -13,13 +13,13 @@ const options = {
 
 const gitana_icon = L.icon({
     iconUrl: 'gitana.svg',
-    iconSize: [40, 40],
+    iconSize: [30, 30],
     className: 'gitana-marker'
 })
 
 const sodebo_icon = L.icon({
     iconUrl: 'sodebo.svg',
-    iconSize: [40, 40],
+    iconSize: [30, 30],
     className: 'sodebo-marker'
 })
 
